@@ -36,13 +36,16 @@
 var game = new Phaser.Game(config);
 function preload ()
 {
-    // this.load.image('egg', 'assets/egg.png');
     this.load.image('background', 'assets/background.png');
     this.load.image('horizontalboundary', 'assets/cupboundhorizontal.png')
     this.load.image('verticalboundary', 'assets/cupboundvertical.png')
-    // this.load.image('egg', 'assets/egg.png')
     this.load.image('cloud', 'assets/cloud.png')
     this.load.spritesheet('egg', 'assets/eggsprite.png', { frameWidth: 76, frameHeight: 88 })
+    this.load.spritesheet('chicken', 'assets/eggsprite.png', { frameWidth: 76, frameHeight: 88 })
+    this.load.spritesheet('raptor', 'assets/raptorsprite.png', { frameWidth: 76, frameHeight: 88 })
+    this.load.spritesheet('king', 'assets/kingsprite.png', { frameWidth: 76, frameHeight: 88 })
+    this.load.spritesheet('binary', 'assets/binarysprite.png', { frameWidth: 76, frameHeight: 88 })
+    this.load.spritesheet('cake', 'assets/cakesprite.png', { frameWidth: 76, frameHeight: 88 })
     this.load.spritesheet('bug', 'assets/bugsprite.png', { frameWidth: 80, frameHeight: 60 });
 }
 
