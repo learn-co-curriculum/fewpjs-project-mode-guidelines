@@ -43,7 +43,7 @@ function preload ()
     // this.load.image('egg', 'assets/egg.png')
     this.load.image('cloud', 'assets/cloud.png')
     this.load.spritesheet('egg', 'assets/eggsprite.png', { frameWidth: 76, frameHeight: 88 })
-    // this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
+    this.load.spritesheet('bug', 'assets/bugsprite.png', { frameWidth: 80, frameHeight: 60 });
 }
 
 function create ()
@@ -52,36 +52,49 @@ function create ()
     this.background = this.add.image(0, 0, 'background');
     this.background.setOrigin(0,0)
 
-    boundaries = this.physics.add.staticGroup()
+    gameBoundaries = this.physics.add.staticGroup()
+    cloudPlatforms = this.physics.add.staticGroup()
+    // cloudPlatforms.forEach(x => x.scale(0.5))
+    // console.log(cloudPlatforms.children[0].entries)
 
     // this.add.image(576, 13, 'horizontalboundary')
-    boundaries.create(575, 710, 'horizontalboundary')
-    boundaries.create(1138, 355, 'verticalboundary')
-    boundaries.create(13, 355, 'verticalboundary')
+    gameBoundaries.create(575, 714, 'horizontalboundary')
+    gameBoundaries.create(1138, 355, 'verticalboundary')
+    gameBoundaries.create(13, 355, 'verticalboundary')
     //mid-center
-    boundaries.create(450, 440, 'cloud')
-    boundaries.create(700, 440, 'cloud')
-    boundaries.create(550, 410, 'cloud')
+    cloudPlatforms.create(450, 440, 'cloud')
+    cloudPlatforms.create(700, 440, 'cloud')
+    cloudPlatforms.create(550, 410, 'cloud')
     //bottom-mid-right
-    boundaries.create(900, 570, 'cloud')
-    boundaries.create(1040, 440, 'cloud')
+    cloudPlatforms.create(900, 570, 'cloud')
+    cloudPlatforms.create(1040, 440, 'cloud')
     //top-left
-    boundaries.create(170, 270, 'cloud')
-    boundaries.create(440, 225, 'cloud')
+    cloudPlatforms.create(170, 270, 'cloud')
+    cloudPlatforms.create(440, 225, 'cloud')
     //bottom-left
-    boundaries.create(210, 560, 'cloud')
+    cloudPlatforms.create(210, 560, 'cloud')
     
     //top-right
-    boundaries.create(780, 240, 'cloud')
-    boundaries.create(870, 270, 'cloud')
+    cloudPlatforms.create(780, 240, 'cloud')
+    cloudPlatforms.create(870, 270, 'cloud')
+
+    
+    // cloudPlatforms.entries.forEach(x => x.setScale(0.2))
+    // console.log(cloudPlatforms.entries)
 
      //character avatars
+     bugEnemy = this.physics.add.sprite(400, 300, 'bug')
+     bugEnemy.setCollideWorldBounds(true)
      eggPlayer = this.physics.add.sprite(100, 653, 'egg')
+     eggPlayer.setScale(0.80)
      eggPlayer.setBounce(0.3);
      eggPlayer.setCollideWorldBounds(true)
 
-     this.physics.add.collider(eggPlayer, boundaries)
-
+     this.physics.add.collider(eggPlayer, cloudPlatforms)
+     this.physics.add.collider(bugEnemy, gameBoundaries)
+     this.physics.add.collider(eggPlayer, gameBoundaries)
+     this.physics.add.collider(bugEnemy, cloudPlatforms)
+     bugEnemy.setScale(0.5,0.5)
      this.anims.create({
         key: 'left',
         frames: this.anims.generateFrameNumbers('egg', { start: 0, end: 7 }),
