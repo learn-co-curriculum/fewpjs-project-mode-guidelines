@@ -1,0 +1,22 @@
+{
+  "name": "eggchickdinoking",
+  "version": "1.0.0",
+  "description": "game",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JazzyMussels/fewpjs-project-mode-guidelines.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JazzyMussels/fewpjs-project-mode-guidelines/issues"
+  },
+  "homepage": "https://github.com/JazzyMussels/fewpjs-project-mode-guidelines#readme",
+  "dependencies": {
+    "phaser": "^3.20.1"
+  }
+}
