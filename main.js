@@ -22,10 +22,7 @@ var makeBugs;
 var gameBoundaries;
 var cloudPlatforms;
 var chickenPlayer;
-var iseggPlayer;
-var isChicken;
-var isKing;
-var isRaptor;
+var activeAvatar = {egg: false, chicken: false, raptor: false, king: false}
 var lastCursor;
 var scene;
 function preload ()
@@ -118,15 +115,15 @@ function create ()
         frameRate: 10,
         repeat: -1
     });
-
-    iseggPlayer = true
- //bugs
+//keeps track of what avatar is active
+    activeAvatar.egg = true
+//makes a variable of "this" when inside functions
   scene = this
- console.log(scene)
+   //bugs function
   makeBugs = () => {
     var bugs = scene.physics.add.group({
     key: 'bug',
-    //repeat: 4,
+    // repeat: 4,
     setXY: { x: Phaser.Math.Between(0, 900), y: 0, stepX: 70 }
 }); 
 bugs.children.iterate(function(bug){
@@ -230,7 +227,7 @@ bugs = makeBugs()
         frameRate: 10,
         repeat: -1 
      });
-     kingPlayer.disableBody(true,true)
+      kingPlayer.disableBody(true,true)
 
     //raptor
     raptorPlayer = this.physics.add.sprite(100, 650, 'raptor')
@@ -331,15 +328,15 @@ bugs = makeBugs()
 function update(){
 
     //egg
-if (iseggPlayer) {
-     if (cursors.left.isDown && iseggPlayer)
+if (activeAvatar.egg) {
+     if (cursors.left.isDown )
      {
          eggPlayer.setVelocityX(-160);
 
          eggPlayer.anims.play('left', true);
          lastCursor = "left"
      }
-     else if (cursors.right.isDown && iseggPlayer)
+     else if (cursors.right.isDown )
      {
          eggPlayer.setVelocityX(160);
 
@@ -360,12 +357,13 @@ if (iseggPlayer) {
          eggPlayer.anims.play('staticRight', true);
      }
 
-     if (cursors.up.isDown && eggPlayer.body.touching.down && iseggPlayer)
+     if (cursors.up.isDown && eggPlayer.body.touching.down )
      {
          eggPlayer.setVelocityY(-400);
      }
 }
     //bugs
+    if (bugs){
      bugs.children.iterate(function(bug){
         if (bug.body.velocity.x >= 0){
              bug.anims.play("rightbug", true)}
@@ -374,9 +372,9 @@ if (iseggPlayer) {
                 bug.anims.play("leftbug", true)
              }
         })
-
+    }
     //chicken
-    if (isChicken){
+    if (activeAvatar.chicken){
     
      if (cursors.left.isDown)
      {
@@ -421,24 +419,33 @@ if (iseggPlayer) {
      }
     }
     //king
-    if (isKing){
+    if (activeAvatar.king){
     if (cursors.left.isDown)
     {
         kingPlayer.setVelocityX(-160);
 
         kingPlayer.anims.play('kingleft', true);
+        lastCursor = "left"
     }
     else if (cursors.right.isDown)
     {
         kingPlayer.setVelocityX(160);
 
         kingPlayer.anims.play('kingright', true);
+        lastCursor = "right"
     }
-    else
+    else if (lastCursor === "left")
     {
         kingPlayer.setVelocityX(0);
 
-        kingPlayer.anims.play('kingturn', true);
+        kingPlayer.anims.play('kingleft', true);
+    }
+
+    else if (lastCursor === "right")
+    {
+        kingPlayer.setVelocityX(0);
+
+        kingPlayer.anims.play('kingright', true);
     }
 
     if (cursors.up.isDown && kingPlayer.body.touching.down)
@@ -447,7 +454,7 @@ if (iseggPlayer) {
     }
     }
     // raptor
-if (isRaptor){
+if (activeAvatar.raptor){
     if (cursors.left.isDown)
     {
         raptorPlayer.setVelocityX(-160);
@@ -504,8 +511,8 @@ function eggBugHit(eggPlayer, bug){
 
      if (bugs.countActive(true) === 0){
         
-        iseggPlayer = false
-        isChicken = true
+        activeAvatar.egg = false
+        activeAvatar.chicken = true
         
         becomeChicken(eggPlayer)
         
@@ -528,8 +535,8 @@ function eggBugHit(eggPlayer, bug){
         bug.disableBody(true,true)}
         if (bugs.countActive(true) === 0){
     
-            isChicken = false
-            isRaptor = true
+            activeAvatar.chicken = false
+            activeAvatar.raptor = true
             
             becomeRaptor(chickenPlayer)    
     
@@ -541,7 +548,36 @@ function eggBugHit(eggPlayer, bug){
             chickenPlayer.setTexture( "raptor")
             raptorPlayer.enableBody(true, chickenPlayer.x, chickenPlayer.y,true, true)
             chickenPlayer.disableBody(true,true)
-            // scene.physics.add.collider(chickenPlayer, bugs, raptorBugHit, null, scene)
+            scene.physics.add.collider(raptorPlayer, bugs, raptorBugHit, null, scene)
+        }
+
+        function raptorBugHit(raptorPlayer, bug){
+            bug.disableBody(true, true)
+            if (bugs.countActive(true) === 0){
+    
+                activeAvatar.raptor = false
+                activeAvatar.king = true
+                
+                becomeKing(raptorPlayer)    
+        
+                }
+            
+        }
+
+        function becomeKing(raptorPlayer){
+            bugs = makeBugs();
+            console.log(raptorPlayer.y)
+            //corrected the king falling through the floor when changing from raptor
+            let y = (raptorPlayer.y >= 669) ? 661.4 : raptorPlayer.y
+            kingPlayer.enableBody(true, raptorPlayer.x, y, true, true);
+            raptorPlayer.setTexture("king");
+            console.log(kingPlayer);
+            raptorPlayer.disableBody(true, true);
+            scene.physics.add.collider(kingPlayer, bugs, kingBugHit, null, scene);
+        }
+
+        function kingBugHit(kingPlayer, bug){
+            bug.disableBody(true, true)
         }
 
     }
