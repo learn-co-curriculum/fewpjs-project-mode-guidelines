@@ -84,9 +84,9 @@ function create ()
     // this.login = this.add.image(1305, 300, 'loginscreen')
     // this.eggScreen = this.add.image(1305, 555, 'eggscreen')
     // this.chickenScreen = this.add.image(1305, 510, 'chickenscreen')
-    // this.raptorScreen = this.add.image(1302, 544, 'raptorscreen')
+    this.raptorScreen = this.add.image(1302, 544, 'raptorscreen')
     // this.kingScreen = this.add.image(1302, 580, 'kingscreen')
-    this.restartScreen = this.add.image(1302, 480, 'restartscreen')
+    // this.restartScreen = this.add.image(1302, 480, 'restartscreen')
     
 
 
@@ -336,7 +336,7 @@ function create ()
     // });
 
     // binary
-     binaryTokens = this.physics.add.sprite(100, 650, 'binary')
+     binaryTokens = this.physics.add.sprite(400, 650, 'binary')
      binaryTokens.setScale(.3)
      binaryTokens.setBounce(0);
      binaryTokens.score = 0
@@ -346,28 +346,28 @@ function create ()
      this.physics.add.collider(binaryTokens, gameBoundaries)
  
    
-     this.anims.create({
-        key: 'left',
-        frames: [ { key: 'binary', frame: 0 } ],
-        frameRate: 10,
-        repeat: -1
-    });
+    //  this.anims.create({
+    //     key: 'left',
+    //     frames: [ { key: 'binary', frame: 0 } ],
+    //     frameRate: 10,
+    //     repeat: -1
+    // });
 
-    this.anims.create({
-        key: 'turn',
-        frames: [ { key: 'binary', frame: 0} ],
-        frameRate: 10,
-        repeat: -1
-    });
+    // this.anims.create({
+    //     key: 'turn',
+    //     frames: [ { key: 'binary', frame: 0} ],
+    //     frameRate: 10,
+    //     repeat: -1
+    // });
 
-    this.anims.create({
-        key: 'right',
-        frames: [ { key: 'binary', frame: 1 } ],
-        frameRate: 10,
-        repeat: -1
+    // this.anims.create({
+    //     key: 'right',
+    //     frames: [ { key: 'binary', frame: 1 } ],
+    //     frameRate: 10,
+    //     repeat: -1
 
        
-    });
+    // });
 
 
 
@@ -378,12 +378,9 @@ function create ()
     // this.add.text(0, 0, "", {font:"1px VCR_OSD_MONO_1.001", fill:"#FFFFFF"});
     // scoreText = this.add.text(1278, 100, '0', { fontSize: '41px', fill: '#1df4ff' });
     // divLine = this.add.text(1200, 130, '--------', { fontSize: '41px', fill: '#1df4ff' });
+    this.physics.add.overlap(raptorPlayer, binaryTokens, collectBinary, null, this);
 }
 
-
-// <div id='border'>
-//     <div id='bg'></div>
-//     <div id='egg'></div>
 
 function update(){
 
@@ -508,8 +505,14 @@ function update(){
                 bug.anims.play("leftbug", true)
             }
     })
-   
+ 
 }
+
+  //binary collection
+
+  function collectBinary(raptorPlayer, binaryTokens) {
+    binaryTokens.disableBody(true, true)
+  }
    
    // this.physics.add.collider(bugs, leftboundary, leftHit, null, this)
 //function leftHit( bug, leftboundary){
