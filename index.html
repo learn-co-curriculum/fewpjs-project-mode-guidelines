@@ -10,6 +10,12 @@
         body {
             margin: 0;
         }
+        font-face {
+            font-family: 'VCR_OSD_MONO_1.001';
+            font-style: normal;
+            font-weight: 400;
+            src: url('assets/font/VCR_OSD_MONO_1.001.ttf')
+}
     </style>
     <!-- <link rel="stylesheet" href="style.css"> -->
 </head>
@@ -33,13 +39,34 @@
     }
 };
 
+
 var game = new Phaser.Game(config);
 function preload ()
-{
+    {
+
+    //scorecard
+    this.load.image('scorecard', 'assets/high_score_screen.png');
+    this.load.image('outer_shell', 'assets/outer_shell.png');
+    this.load.image('inner_bar', 'assets/inner_bar.jpg');
+
+    //background and status screens
+
     this.load.image('background', 'assets/background.png');
+    this.load.image('introscreen', 'assets/intro_screen.png')
+    this.load.image('loginscreen', 'assets/login_screen.png')
+    this.load.image('eggscreen', 'assets/egg_screen.png')
+    this.load.image('chickenscreen', 'assets/chicken_screen.png')
+    this.load.image('raptorscreen', 'assets/raptor_screen.png')
+    this.load.image('kingscreen', 'assets/king_screen.png')
+    this.load.image('restartscreen', 'assets/restart_screen.png')
+    
+
+    //boundaries and platforms
     this.load.image('horizontalboundary', 'assets/cupboundhorizontal.png')
     this.load.image('verticalboundary', 'assets/cupboundvertical.png')
     this.load.image('cloud', 'assets/cloud.png')
+
+    //character sprites 
     this.load.spritesheet('egg', 'assets/eggsprite.png', { frameWidth: 76, frameHeight: 88 })
     this.load.spritesheet('chicken', 'assets/chickensprite.png', { frameWidth: 82, frameHeight: 60 })
     this.load.spritesheet('raptor', 'assets/raptorsprite.png', { frameWidth: 186, frameHeight: 129 })
@@ -51,10 +78,40 @@ function preload ()
 
 function create ()
 {
-    //  background, boundaries
+
+    //in-game screens
+    // this.intro = this.add.image(1300, 360, 'introscreen')
+    // this.login = this.add.image(1305, 300, 'loginscreen')
+    // this.eggScreen = this.add.image(1305, 555, 'eggscreen')
+    // this.chickenScreen = this.add.image(1305, 510, 'chickenscreen')
+    // this.raptorScreen = this.add.image(1302, 544, 'raptorscreen')
+    // this.kingScreen = this.add.image(1302, 580, 'kingscreen')
+    this.restartScreen = this.add.image(1302, 480, 'restartscreen')
+    
+
+
+  
+
+    //  background
     this.background = this.add.image(0, 0, 'background');
     this.background.setOrigin(0,0)
 
+      //scorecard
+    // this.scoreCard = this.add.image(1300, 60, 'scorecard')
+    // this.scoreCard.setScale(0.8)
+    
+    // evolve-bar
+    this.evoBarShell = this.add.image(602, 30, 'outer_shell')
+    this.evoBarShell.setScale(1.8)
+    this.evoBatInterior = this.add.image(373.5, 12, 'inner_bar').setOrigin(0, 0)
+    this.evoBatInterior.setScale(1.8)
+
+    //floor is -457, 
+    this.evoBatInterior.displayWidth = 0;
+    this.evoBatInterior.displayWidth += 30
+    
+
+    // boundaries
     gameBoundaries = this.physics.add.staticGroup()
     cloudPlatforms = this.physics.add.staticGroup()
 
@@ -246,8 +303,8 @@ function create ()
 
     // // cake ammo
     // cakeAmmo = this.physics.add.sprite(100, 650, 'cake')
-    //  cakeAmmo.setScale(0.18)
-    //  cakeAmmo.setBounce(0);
+    //  cakeAmmo.setScale(1)
+    //  cakeAmmo.setBounce(1.5);
     //  cakeAmmo.score = 0
     //  cakeAmmo.setCollideWorldBounds(true)
 
@@ -278,11 +335,49 @@ function create ()
        
     // });
 
-    
+    // binary
+     binaryTokens = this.physics.add.sprite(100, 650, 'binary')
+     binaryTokens.setScale(.3)
+     binaryTokens.setBounce(0);
+     binaryTokens.score = 0
+     binaryTokens.setCollideWorldBounds(true)
+
+     this.physics.add.collider(binaryTokens, cloudPlatforms)
+     this.physics.add.collider(binaryTokens, gameBoundaries)
+ 
+   
+     this.anims.create({
+        key: 'left',
+        frames: [ { key: 'binary', frame: 0 } ],
+        frameRate: 10,
+        repeat: -1
+    });
+
+    this.anims.create({
+        key: 'turn',
+        frames: [ { key: 'binary', frame: 0} ],
+        frameRate: 10,
+        repeat: -1
+    });
+
+    this.anims.create({
+        key: 'right',
+        frames: [ { key: 'binary', frame: 1 } ],
+        frameRate: 10,
+        repeat: -1
+
+       
+    });
+
 
 
     cursors = this.input.keyboard.createCursorKeys();
     bugs.setVelocityX(-160)
+
+    //score
+    // this.add.text(0, 0, "", {font:"1px VCR_OSD_MONO_1.001", fill:"#FFFFFF"});
+    // scoreText = this.add.text(1278, 100, '0', { fontSize: '41px', fill: '#1df4ff' });
+    // divLine = this.add.text(1200, 130, '--------', { fontSize: '41px', fill: '#1df4ff' });
 }
 
 
